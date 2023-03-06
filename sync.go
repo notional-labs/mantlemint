@@ -24,9 +24,6 @@ import (
 	"github.com/terra-money/mantlemint/db/heleveldb"
 	"github.com/terra-money/mantlemint/db/hld"
 	"github.com/terra-money/mantlemint/db/safe_batch"
-	"github.com/terra-money/mantlemint/indexer"
-	"github.com/terra-money/mantlemint/indexer/block"
-	"github.com/terra-money/mantlemint/indexer/tx"
 	"github.com/terra-money/mantlemint/mantlemint"
 	"github.com/terra-money/mantlemint/rpc"
 	"github.com/terra-money/mantlemint/store/rootmulti"
@@ -153,15 +150,6 @@ func main() {
 		mantlemintConfig.WSEndpoints,
 	)
 
-	// create indexer service
-	indexerInstance, indexerInstanceErr := indexer.NewIndexer(mantlemintConfig.IndexerDB, mantlemintConfig.Home)
-	if indexerInstanceErr != nil {
-		panic(indexerInstanceErr)
-	}
-
-	indexerInstance.RegisterIndexerService("tx", tx.IndexTx)
-	indexerInstance.RegisterIndexerService("block", block.IndexBlock)
-
 	abcicli, _ := appCreator.NewABCIClient()
 	rpccli := rpc.NewRpcClient(abcicli)
 
@@ -180,8 +168,6 @@ func main() {
 		// default: noop,
 		// todo: make this part injectable
 		func(router *mux.Router) {
-			indexerInstance.RegisterRESTRoute(router, tx.RegisterRESTRoute)
-			indexerInstance.RegisterRESTRoute(router, block.RegisterRESTRoute)
 		},
 
 		// inject flag checker for synced
@@ -222,12 +208,6 @@ func main() {
 			if rollbackBatch != nil {
 				rollbackBatch.Close()
 				rollbackBatch = nil
-			}
-
-			// run indexer BEFORE batch flush
-			if indexerErr := indexerInstance.Run(feed.Block, feed.BlockID, mm.GetCurrentEventCollector()); indexerErr != nil {
-				debug.PrintStack()
-				panic(indexerErr)
 			}
 
 			// flush db batch
