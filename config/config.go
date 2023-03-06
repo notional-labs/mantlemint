@@ -19,7 +19,6 @@ type Config struct {
 	RPCEndpoints []string
 	WSEndpoints  []string
 	MantlemintDB string
-	IndexerDB    string
 	DisableSync  bool
 }
 
@@ -56,9 +55,6 @@ func NewConfig() Config {
 				return mantlemintDB
 			}
 		}(),
-
-		// IndexerDB is the db name for indexed data
-		IndexerDB: getValidEnv("INDEXER_DB"),
 
 		// DisableSync sets a flag where if true mantlemint won't accept any blocks (usually for debugging)
 		DisableSync: func() bool {

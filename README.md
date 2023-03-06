@@ -73,7 +73,6 @@ GENESIS_PATH=config/genesis.json \
 # - read $HOME/config/app.toml
 # - create and maintain $HOME/mantlemint.db directory
 # - create and maintain $HOME/data/* for wasm blobs; (unsafe to share with RPC!)
-# - create and maintain $HOME/$(INDEXER_DB).db for mantle indexers
 MANTLEMINT_HOME=mantlemint \
 
 # Chain ID 
@@ -87,9 +86,6 @@ WS_ENDPOINTS=ws://rpc1:26657/websocket,ws://rpc2:26657/websocket \
 
 # Name of mantlemint.db, akin to application.db for core
 MANTLEMINT_DB=mantlemint \
-
-# Name of indexer db
-INDEXER_DB=indexer \
 
 # Flag to enable/disable mantlemint sync, mainly for debugging
 DISABLE_SYNC=false \
