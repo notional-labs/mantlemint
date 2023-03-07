@@ -132,9 +132,9 @@ func main() {
 	batchedOrigin.Open()
 
 	// initialize state machine with genesis
-	if initErr := mm.Init(genesisDoc); initErr != nil {
-		panic(initErr)
-	}
+	//if initErr := mm.Init(genesisDoc); initErr != nil {
+	//	panic(initErr)
+	//}
 
 	// flush to db; panic upon error (can't proceed)
 	if rollback, flushErr := batchedOrigin.Flush(); flushErr != nil {
