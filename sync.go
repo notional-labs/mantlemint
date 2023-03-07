@@ -66,14 +66,14 @@ func main() {
 	logger := tmlog.NewTMLogger(os.Stdout)
 	codec := terra.MakeEncodingConfig()
 
-	// tendermint state.db & blockstore.db
-	ldb_tm_state, ldbErr := tmdb.NewGoLevelDB("state", "/Users/tuanpa/.mantlemint")
-	ldb_tm_blockstore, ldbErr := tmdb.NewGoLevelDB("blockstore", "/Users/tuanpa/.mantlemint")
-
-	defer func() {
-		ldb_tm_state.Close()
-		ldb_tm_blockstore.Close()
-	}()
+	//// tendermint state.db & blockstore.db
+	//ldb_tm_state, ldbErr := tmdb.NewGoLevelDB("state", "/Users/tuanpa/.mantlemint")
+	//ldb_tm_blockstore, ldbErr := tmdb.NewGoLevelDB("blockstore", "/Users/tuanpa/.mantlemint")
+	//
+	//defer func() {
+	//	ldb_tm_state.Close()
+	//	ldb_tm_blockstore.Close()
+	//}()
 
 	// customize CMS to limit kv store's read height on query
 	cms := rootmulti.NewStore(batched, hldb)
@@ -112,8 +112,6 @@ func main() {
 	var executor = mantlemint.NewMantlemintExecutor(batched, appConns.Consensus())
 	var mm = mantlemint.NewMantlemint(
 		batched,
-		ldb_tm_state,
-		ldb_tm_blockstore,
 		appConns,
 		executor,
 

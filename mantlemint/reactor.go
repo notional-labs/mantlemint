@@ -45,8 +45,6 @@ type Instance struct {
 
 func NewMantlemint(
 	db tmdb.DB,
-	db_tm_state tmdb.DB,
-	db_tm_blockstore tmdb.DB,
 	conn proxy.AppConns,
 	executor Executor,
 	runBefore MantlemintCallbackBefore,
@@ -54,8 +52,8 @@ func NewMantlemint(
 ) Mantlemint {
 
 	// here we go!
-	var stateStore = state.NewStore(db_tm_state)
-	var blockStore = store.NewBlockStore(db_tm_blockstore)
+	var stateStore = state.NewStore(db)
+	var blockStore = store.NewBlockStore(db)
 	var lastState, err = stateStore.Load()
 
 	if err != nil {
